@@ -13,6 +13,8 @@
         "*.tcc": "cpp",
         "string": "cpp",
         "string_view": "cpp",
-        "ch32v00x_rcc.h": "c"
+        "ch32v00x_rcc.h": "c",
+        "system_ch32v00x.h": "c",
+        "core_riscv.h": "c"
     }
 }
