@@ -201,6 +201,9 @@ public:
 		is_init = true;
 	}
 
+	/// @brief Convert key code into ascii
+	/// @param key_code key code
+	/// @return ascii code
 	static char ascii(uint32_t key_code) {
 		return gKeyCodeToAscii[((uint8_t)key_code) & 0b01111111];
 	}
@@ -237,11 +240,11 @@ public:
 
 	static void handle() {
 		if (is_rawdata_ready == 0) { return; /* no data */ }
-		if (is_data_ready) { return raw_reset(); /* keyboard was not read yet */ }
+		if (is_data_ready) { raw_reset(); return; /* keyboard was not read yet */ }
 
 		// Check start bit
 		uint16_t mask = 0b0000010000000000;
-		if (rawdata & mask) { return raw_reset(); /* wrong start bit */ } 
+		if (rawdata & mask) { raw_reset(); return; /* wrong start bit */ } 
 
 		// Get data bits
 		uint8_t buff = 0;
@@ -279,6 +282,12 @@ public:
 			return kbd_code;
 		}
 		return 0;
+	}
+
+	/// @brief Read printable symbol from keyboard input
+	/// @return ascii symbol if si_printable(), otherwise 0
+	static uint32_t read_printable() {
+		return ascii(read());
 	}
 
 	/// @brief Store keyboard incoming raw data bit
