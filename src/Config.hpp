@@ -34,13 +34,23 @@ public:
 
 	static void init_System() {
 		SystemInit();
+		NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
 		SystemCoreClockUpdate();
+		
+		// Disable GPIO Alternate Functions and extrnal oscilator
+		// Othewize GPIO PORT A does not work
+		RCC_HSEConfig(RCC_HSE_OFF);
+		GPIO_PinRemapConfig(GPIO_Remap_PA1_2, DISABLE);
+
+		// Remapping
+		RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
 	}
 
 	/// @brief Configure GPIO pin
 	/// @param port port name
 	/// @param pin pin index
 	/// @param mode pin mode
+	/// @param speed defaults to GPIO_Speed_30MHz
 	static void GPIO(GPIO_TypeDef *port, uint16_t pin,
 			GPIOMode_TypeDef mode, GPIOSpeed_TypeDef speed=GPIO_Speed_30MHz)
 	{
